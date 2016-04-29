@@ -1,0 +1,21 @@
+{
+  "name": "tessel2-climate-test",
+  "version": "1.0.0",
+  "description": "testing my Tessel 2 and the climate module",
+  "main": "climate.js",
+  "scripts": {
+    "start": "t2 run climate.js",
+    "build": "t2 push climate.js",
+    "clear": "t2 erase",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "git://github.com/zrrrzzt/tessel2-climate-test.git",
+  "keywords": [
+    "Tessel"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "climate-si7020": "0.1.1",
+    "firebase": "2.4.2"
+  }
+}
