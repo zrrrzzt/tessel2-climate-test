@@ -41,7 +41,7 @@ function handleHumidity (error, humitidy) {
     logToFirebase({
       type: 'humidity',
       timestamp: new Date().getTime(),
-      temperature: humitidy.toFixed(2)
+      humidity: humitidy.toFixed(2)
 
     })
   }
