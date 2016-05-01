@@ -6,36 +6,51 @@ var climatelib = require('climate-si7020')
 var climate = climatelib.use(tessel.port['A'])
 var config = require('./config')
 
-function logDataToFirebase (data) {
-  var database = new Firebase(config.FIREBASE_URL + '/data')
+function logToFirebase (data) {
+  var database = new Firebase(config.FIREBASE_URL + '/data/' + data.type)
   database.push(data)
-}
-
-function logErrorToFirebase (error) {
-  var database = new Firebase(config.FIREBASE_URL + '/error')
-  database.push(error)
 }
 
 function handleTemperature (error, temperature) {
   if (error) {
-    logErrorToFirebase(error)
+    logToFirebase({
+      type: 'error',
+      reading: 'temperature',
+      timestamp: new Date().getTime(),
+      error: JSON.stringify(error)
+    })
   } else {
-    climate.readHumidity(function (err, humidity) {
-      if (err) {
-        logErrorToFirebase(err)
-      } else {
-        logDataToFirebase({
-          temperature: temperature.toFixed(2),
-          humidity: humidity.toFixed(2)
-        })
-      }
-      setTimeout(loop, parseInt(config.LOOP_TIMEOUT, 10))
+    logToFirebase({
+      type: 'temperature',
+      timestamp: new Date().getTime(),
+      temperature: temperature.toFixed(2)
+
+    })
+  }
+}
+
+function handleHumidity (error, humitidy) {
+  if (error) {
+    logToFirebase({
+      type: 'error',
+      reading: 'humidity',
+      timestamp: new Date().getTime(),
+      error: JSON.stringify(error)
+    })
+  } else {
+    logToFirebase({
+      type: 'humidity',
+      timestamp: new Date().getTime(),
+      temperature: humitidy.toFixed(2)
+
     })
   }
 }
 
 function loop () {
   climate.readTemperature(config.TEMPERATURE_FORMAT, handleTemperature)
+  climate.readHumidity(handleHumidity)
+  setTimeout(loop, parseInt(config.LOOP_TIMEOUT, 10))
 }
 
 climate.on('ready', function () {
