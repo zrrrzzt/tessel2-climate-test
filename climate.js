@@ -23,8 +23,7 @@ function handleTemperature (error, temperature) {
     logToFirebase({
       type: 'temperature',
       timestamp: new Date().getTime(),
-      temperature: temperature.toFixed(2)
-
+      temperature: temperature
     })
   }
 }
@@ -41,14 +40,14 @@ function handleHumidity (error, humitidy) {
     logToFirebase({
       type: 'humidity',
       timestamp: new Date().getTime(),
-      humidity: humitidy.toFixed(2)
-
+      humidity: humitidy
     })
   }
 }
 
 function loop () {
-  climate.readTemperature(config.TEMPERATURE_FORMAT, handleTemperature)
+  console.log('Logging temperature and humidity')
+  climate.readTemperature(handleTemperature)
   climate.readHumidity(handleHumidity)
   setTimeout(loop, parseInt(config.LOOP_TIMEOUT, 10))
 }
