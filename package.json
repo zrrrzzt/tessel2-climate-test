@@ -16,6 +16,6 @@
   "license": "MIT",
   "dependencies": {
     "climate-si7020": "0.1.1",
-    "firebase": "4.5.1"
+    "firebase": "4.6.0"
   }
 }
